@@ -1,4 +1,4 @@
-function Costs(){
+function Cost(){
     return(
         <div>
 
@@ -6,4 +6,4 @@ function Costs(){
     )
 }
 
-export default Costs
+export default Cost
