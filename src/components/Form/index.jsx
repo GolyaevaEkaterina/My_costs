@@ -1,8 +1,10 @@
 import Button from "components/Button"
 import { useState } from "react"
-const categories = ['Продукты', 'Транспорт', 'Красота', 'Рестораны', 'Развлечения']
-function Form({addCost, filterByTransport, filterByProducts, filterByBeauty, filterByRestaurants, filterByEntertainments, calculateSumAll}){
-    const [sum, setSum] = useState(" ")
+import categories from "categories"
+import './Form.css';
+
+function Form({addCost}){
+    const [sum, setSum] = useState("")
     const [date, setDate] = useState("0000-00-00")
     const [category, setCategory] = useState(categories[1])
     
@@ -13,18 +15,20 @@ function Form({addCost, filterByTransport, filterByProducts, filterByBeauty, fil
             date,
             category
         }
-        calculateSumAll(cost)
-        filterByTransport(cost)
-        filterByProducts(cost)
-        filterByBeauty(cost)
-        filterByRestaurants(cost)
-        filterByEntertainments(cost)
         addCost(cost)
         setSum('')
         setDate('')
         setCategory(categories[1])
     }
 
+    function inputSum(event, sum){
+        const value = event.target.value
+        setSum(value)
+        const coincidence = /^\d*$/.test(value)
+        if(!coincidence){
+            setSum(sum)
+        }
+    }
     
     return(
         <div>
@@ -32,23 +36,24 @@ function Form({addCost, filterByTransport, filterByProducts, filterByBeauty, fil
             <div className="flex flex-col">
                 <label>Сумма</label>
                 <input 
-                    onChange={(event)=>setSum(event.target.value)}
+                    onChange={(event)=>inputSum(event, sum)}
+
                     value={sum}
                     name="sum" 
-                    type="number" 
-                    className="h-10 border-2 rounded-lg border-green-600"
+                    type="text" 
+                    className="input"
                 />
             </div>
             <div className="flex flex-col">
                 <label>Дата</label>
                 <input
                     onChange={(event)=>setDate(event.target.value)}
-                    value={date} 
+                    value={date}
                     type="date" 
                     name="trip-start" 
                     min="2018-01-01" 
                     max="2030-12-31" 
-                    className="h-10 border-2 rounded-lg border-green-600"
+                    className="input"
                 />    
             </div>
             <div className="flex flex-col">
@@ -58,7 +63,7 @@ function Form({addCost, filterByTransport, filterByProducts, filterByBeauty, fil
                     value={category} 
                     name="category" 
                     type="text" 
-                    className="h-10 border-2 rounded-lg border-green-600">
+                    className="input">
                         {categories.map(category => (
                             <option key={category}>{category}</option>
                         ))}
