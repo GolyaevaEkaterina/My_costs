@@ -2,22 +2,24 @@ import Button from "components/Button"
 import { useState } from "react"
 import categories from "categories"
 import './Form.css';
+import { format, compareAsc } from "date-fns";
 
-function Form({addCost}){
+function Form({addItem, categories}){
+    
     const [sum, setSum] = useState("")
-    const [date, setDate] = useState("0000-00-00")
+    const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"))
     const [category, setCategory] = useState(categories[1])
     
-    function getCost(event){
+    function getItem(event){
         event.preventDefault()
-        const cost={
+        const item={
             sum,
             date,
             category
         }
-        addCost(cost)
+        addItem(item)
         setSum('')
-        setDate('')
+        setDate(date)
         setCategory(categories[1])
     }
 
@@ -69,7 +71,7 @@ function Form({addCost}){
                         ))}
                     </select>
             </div>
-            <Button handleClick={getCost} title={"Добавить"} type="submit"/>
+            <Button handleClick={getItem} title={"Добавить"} type="submit"/>
             </form>
         </div>  
     )

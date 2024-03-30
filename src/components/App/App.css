@@ -1,13 +1,11 @@
 .App {
   text-align: center;
   max-width: 900px;
-  margin: 0 auto;
+  margin: 50px auto;
   padding-bottom: 100px;
 }
 
-.category{
-  @apply px-6 py-3 mt-6 border-2 rounded-lg  text-lg font-semibold
-}
+
 
 .App-logo {
   height: 40vmin;

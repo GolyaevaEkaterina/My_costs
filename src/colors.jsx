@@ -1,0 +1,1 @@
+const COLORS = ['#87EAF2', '#F48FFF', '#FADB5F', '#81DEFD', '#91E697', '#B990FF' ];

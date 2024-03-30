@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
-import categories from 'categories';
+import { PieChart, Pie, Sector, Cell} from 'recharts';
 
 function Diagram({arr}){
     const data = arr
@@ -22,7 +21,7 @@ function Diagram({arr}){
       
       return (
         <div width="100%" height="100%">
-          <PieChart width={400} height={400}>
+          <PieChart width={400} height={200}>
             <Pie
               data={data}
               cx="50%"
