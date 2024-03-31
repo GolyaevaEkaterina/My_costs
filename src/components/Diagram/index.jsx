@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import { PieChart, Pie, Sector, Cell} from 'recharts';
+import React from 'react';
+import { PieChart, Pie, Cell} from 'recharts';
 
 function Diagram({arr}){
     const data = arr

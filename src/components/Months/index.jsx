@@ -1,6 +1,5 @@
 import months from "months";
-import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+// import classNames from 'classnames';
 
 function Months({handleClick}){
     // const[isClick, setIsClick] = useState(false)

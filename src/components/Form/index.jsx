@@ -1,8 +1,7 @@
 import Button from "components/Button"
 import { useState } from "react"
-import categories from "categories"
 import './Form.css';
-import { format, compareAsc } from "date-fns";
+import { format} from "date-fns";
 
 function Form({addItem, categories}){
     

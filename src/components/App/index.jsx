@@ -1,14 +1,10 @@
-
-import Diagram from 'components/Diagram';
 import './App.css';
 import Header from 'components/Header';
 import Form from 'components/Form';
 import Cost from 'components/Cost';
 import categories from 'categories';
-import months from 'months';
 import { useEffect, useState } from 'react';
 import CategoriesContainer from 'components/CategoriesContainer'; 
-import { format, compareAsc } from "date-fns";
 import classNames from 'classnames';
 import Months from 'components/Months';
 import categoriesIncomes from 'categoriesIncomes';
@@ -58,7 +54,7 @@ function App() {
       filteredItems = costs
     }
 
-    if(category === "all" & chosenMonth != 'all'){
+    if(category === "all" & chosenMonth !== 'all'){
       filteredItems = costs.filter(cost => {
         const date = new Date (cost.date)
         const month = date.getMonth()
@@ -68,11 +64,11 @@ function App() {
         }
       })}
 
-    if(category != "all" & chosenMonth === 'all'){
+    if(category !== "all" & chosenMonth === 'all'){
       filteredItems = costs.filter(cost => cost.category === category)
     }
 
-    if(category != "all" & chosenMonth != 'all'){
+    if(category !== "all" & chosenMonth !== 'all'){
       filteredItems = costs.filter(cost => {
         const date = new Date (cost.date)
         const month = date.getMonth()
@@ -98,7 +94,7 @@ function App() {
       filteredItems = incomes
     }
 
-    if(category === "all" & chosenMonth != 'all'){
+    if(category === "all" & chosenMonth !== 'all'){
       filteredItems = incomes.filter(income => {
         const date = new Date (income.date)
         const month = date.getMonth()
@@ -108,11 +104,11 @@ function App() {
         }
       })}
 
-    if(category != "all" & chosenMonth === 'all'){
+    if(category !== "all" & chosenMonth === 'all'){
       filteredItems = incomes.filter(income => income.category === category)
     }
 
-    if(category != "all" & chosenMonth != 'all'){
+    if(category !== "all" & chosenMonth !== 'all'){
       filteredItems = incomes.filter(income => {
         const date = new Date (income.date)
         const month = date.getMonth()
@@ -129,8 +125,7 @@ function App() {
     })
     return sum
   }  
-
-
+  
   function createArrGroupsCosts(){
     const newGroups = [...groupsCosts]
     categories.map(c => {

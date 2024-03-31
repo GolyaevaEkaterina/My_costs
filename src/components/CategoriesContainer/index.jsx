@@ -1,4 +1,3 @@
-import categories from 'categories';
 import './CategoriesContainer.css';
 import Diagram from 'components/Diagram';
 
