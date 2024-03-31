@@ -14,25 +14,43 @@ import Months from 'components/Months';
 import categoriesIncomes from 'categoriesIncomes';
 
 function App() {
-  const [costs, setCosts] = useState([])
-  // const [incomes, setIncomes] = useState([])
+  const arrCosts = JSON.parse(localStorage.getItem('costs'))
+  const arrIncomes = JSON.parse(localStorage.getItem('incomes'))
+
+  const [costs, setCosts] = useState(arrCosts === null ? [] : arrCosts)
+  const [incomes, setIncomes] = useState(arrIncomes === null ? [] : arrIncomes)
   const [categoryFilter, setCategoryFilter] = useState('all')
-  const [groups, setGroups] = useState([])
+  const [groupsCosts, setGroupsCosts] = useState([])
+  const [groupsIncomes, setGroupsIncomes] = useState([])
   const [chosenMonth, setChosenMonth] = useState('all')
 
   function addCost(cost){
     setCosts([cost, ...costs])
   } 
-  // function addIncome(income){
-  //   setIncomes([income, ...incomes])
-  //   console.log(incomes)
-  // } 
+  function addIncome(income){
+    setIncomes([income, ...incomes])
+    console.log(incomes)
+  } 
+  useEffect(()=>{
+    console.log('mount')
+  }, [])
 
   useEffect(()=>{
-    createArrGroups() 
-  }, [costs, categoryFilter, chosenMonth ])
+    createArrGroupsCosts() 
+    createArrGroupsIncomes()
+  }, [costs, incomes, categoryFilter, chosenMonth ])
 
-  function calculateCategory(category){
+  useEffect(()=>{
+    localStorage.setItem('incomes', JSON.stringify(incomes))
+  }, [incomes])
+
+  useEffect(()=>{
+    localStorage.setItem('costs', JSON.stringify(costs))
+    console.log('apdate costs')
+  }, [costs])
+
+
+  function calculateCosts(category){
     let filteredItems
     let sum = 0
 
@@ -71,11 +89,52 @@ function App() {
     })
     return sum
   }  
+  
+  function calculateIncomes(category){
+    let filteredItems
+    let sum = 0
 
-  function createArrGroups(){
-    const newGroups = [...groups]
+    if(category === "all" & chosenMonth === 'all'){
+      filteredItems = incomes
+    }
+
+    if(category === "all" & chosenMonth != 'all'){
+      filteredItems = incomes.filter(income => {
+        const date = new Date (income.date)
+        const month = date.getMonth()
+
+        if(category === 'all' & chosenMonth === month){
+          return true
+        }
+      })}
+
+    if(category != "all" & chosenMonth === 'all'){
+      filteredItems = incomes.filter(income => income.category === category)
+    }
+
+    if(category != "all" & chosenMonth != 'all'){
+      filteredItems = incomes.filter(income => {
+        const date = new Date (income.date)
+        const month = date.getMonth()
+
+        if(income.category === category & chosenMonth === month){
+          return true
+        }
+      })
+    }
+    
+    filteredItems.map(f => {
+      const secondSum = Number(f.sum)
+      sum = sum + secondSum
+    })
+    return sum
+  }  
+
+
+  function createArrGroupsCosts(){
+    const newGroups = [...groupsCosts]
     categories.map(c => {
-      const sum = calculateCategory(c)
+      const sum = calculateCosts(c)
       const indx = categories.indexOf(c)
       const group = {
         name: c,
@@ -83,8 +142,21 @@ function App() {
       }
       newGroups.splice(indx, 1, group)     
     })
-    console.log(newGroups)
-    setGroups(newGroups)
+    setGroupsCosts(newGroups)
+  }
+
+  function createArrGroupsIncomes(){
+    const newGroups = [...groupsIncomes]
+    categoriesIncomes.map(c => {
+      const sum = calculateIncomes(c)
+      const indx = categoriesIncomes.indexOf(c)
+      const group = {
+        name: c,
+        value: sum,
+      }
+      newGroups.splice(indx, 1, group)     
+    })
+    setGroupsIncomes(newGroups)
   }
   
   const[isOpenIncomes, setIsOpenIncomes] = useState(false)
@@ -119,67 +191,77 @@ function App() {
     }
   })
 
-  // const filteredIncomes = incomes.filter(income => {
-  //   const date = new Date (income.date)
-  //   const month = date.getMonth()
+  const filteredIncomes = incomes.filter(income => {
+    const date = new Date (income.date)
+    const month = date.getMonth()
 
-  //   if(categoryFilter === 'all' & chosenMonth === 'all'){
-  //     return true
-  //   }
-  //   if(month === chosenMonth & income.category === categoryFilter){
-  //     return month === chosenMonth & income.category === categoryFilter
-  //   }
-  //   if(month === chosenMonth & categoryFilter === "all"){
-  //     return month === chosenMonth
-  //   }
-  //   if(chosenMonth === 'all' & income.category === categoryFilter){
-  //     return income.category === categoryFilter
-  //   }
-  // })
+    if(categoryFilter === 'all' & chosenMonth === 'all'){
+      return true
+    }
+    if(month === chosenMonth & income.category === categoryFilter){
+      return month === chosenMonth & income.category === categoryFilter
+    }
+    if(month === chosenMonth & categoryFilter === "all"){
+      return month === chosenMonth
+    }
+    if(chosenMonth === 'all' & income.category === categoryFilter){
+      return income.category === categoryFilter
+    }
+  })
 
   return (
-    <div className="App">
+    <div className='background min-h-screen'>
+      <div className="App">
       <Header handleClick={()=>openIncomes()} handleClickCosts={()=>openCosts()}/>
-      <div className={classNames('rounded-b-lg border-2 border-t-0 p-4 bg-cyan-50',{
+      <div className={classNames('rounded-b-lg border-t-0 p-1 md:p-4 container-costs shadow-violet-500 shadow-lg',{
         'hidden': !isOpenCosts
         })}>
         <Months handleClick={setChosenMonth}/>        
         <CategoriesContainer 
           setCategoryFilter={setCategoryFilter} 
-          calculateCategory={calculateCategory}
-          arr={groups}
+          calculateCategory={calculateCosts}
+          arr={groupsCosts}
           categories={categories}
+          all={'allCosts'}
         />      
         <Form addItem={addCost} categories={categories}/>
-        <div>        
-            {filteredCosts.map(f => {
+        <div>
+            {filteredCosts.length === 0 && (
+              <div className='text-white font-semibold text-lg mb-6'> Нет трат в этой катеории </div>
+            )}        
+            {filteredCosts.length > 0 && filteredCosts.map(f => {
               return(
-                <Cost sum={f.sum} date={f.date} category={f.category}/>
+                <Cost sign={'-'} sum={f.sum} date={f.date} category={f.category}/>
               )
             })}
         </div>
       </div>
       
-      <div className={classNames('rounded-b-lg border-2 border-t-0 p-4 bg-lime-50',{
+      <div className={classNames('rounded-b-lg border-t-0 p-1 md:p-4 container-incomes shadow-blue-500 shadow-lg',{
         'hidden': !isOpenIncomes
         })}>
-        {/* <Months handleClick={setChosenMonth}/>        
+        <Months handleClick={setChosenMonth}/>        
         <CategoriesContainer 
           setCategoryFilter={setCategoryFilter} 
-          calculateCategory={calculateCategory}
-          arr={groups}
+          calculateCategory={calculateIncomes}
+          arr={groupsIncomes}
           categories={categoriesIncomes}
+          all={'allIncomes'}
         />      
         <Form addItem={addIncome} categories={categoriesIncomes}/>
-        <div>        
-            {filteredIncomes.map(f => {
-              return(
-                <Cost sum={f.sum} date={f.date} category={f.category}/>
+        <div>
+            {filteredIncomes.length === 0 && (
+              <div className='text-white font-semibold text-lg mb-6'> Нет доходов в этой категории </div>
+            )}        
+            {filteredIncomes.length > 0 && filteredIncomes.map(f => {
+              return(                
+                <Cost sign={'+'} sum={f.sum} date={f.date} category={f.category}/>
               )
             })}
-        </div> */}
+        </div>
       
 
+      </div>
       </div>
     </div>
   );

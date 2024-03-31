@@ -1,11 +1,21 @@
 .App {
   text-align: center;
   max-width: 900px;
-  margin: 50px auto;
-  padding-bottom: 100px;
+  margin: 0 auto;
+  background-color: #180537;
+  @apply py-2 md:py-20 px-2
+}
+.background{
+  background-color: #180537;
 }
 
+.container-costs{
+  background: linear-gradient(#F368FC, #9446ED);
+}
 
+.container-incomes{
+  background: linear-gradient(#62F4EB, #3A66DB);
+}
 
 .App-logo {
   height: 40vmin;

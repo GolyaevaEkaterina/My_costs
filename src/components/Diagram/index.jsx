@@ -20,8 +20,8 @@ function Diagram({arr}){
       };
       
       return (
-        <div width="100%" height="100%">
-          <PieChart width={400} height={200}>
+        <div width="100%" height="100%" className="flex justify-center items-center">
+          <PieChart width={300} height={200}>
             <Pie
               data={data}
               cx="50%"
