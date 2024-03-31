@@ -227,7 +227,7 @@ function App() {
         <Form addItem={addCost} categories={categories}/>
         <div>
             {filteredCosts.length === 0 && (
-              <div className='text-white font-semibold text-lg mb-6'> Нет трат в этой катеории </div>
+              <div className='text-white font-semibold text-lg mb-6'> Нет трат в этой категории </div>
             )}        
             {filteredCosts.length > 0 && filteredCosts.map(f => {
               return(
