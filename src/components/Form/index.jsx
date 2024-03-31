@@ -34,9 +34,9 @@ function Form({addItem, categories}){
     
     return(
         <div>
-            <form className="grid grid-cols-1 md:grid-cols-4 gap-10 items-end mx-16 mb-10 md:mx-0">
+            <form className="grid grid-cols-2 gap-1 md:grid-cols-4 md:gap-10 items-end mx-1  mb-10 md:mx-1">
             <div className="flex flex-col">
-                <label>Сумма</label>
+                <label className="label">Сумма</label>
                 <input 
                     onChange={(event)=>inputSum(event, sum)}
 
@@ -47,7 +47,7 @@ function Form({addItem, categories}){
                 />
             </div>
             <div className="flex flex-col">
-                <label>Дата</label>
+                <label className="label">Дата</label>
                 <input
                     onChange={(event)=>setDate(event.target.value)}
                     value={date}
@@ -59,7 +59,7 @@ function Form({addItem, categories}){
                 />    
             </div>
             <div className="flex flex-col">
-                <label>Категория</label>
+                <label className="label">Категория</label>
                 <select
                     onChange={(event)=>setCategory(event.target.value)}
                     value={category} 
