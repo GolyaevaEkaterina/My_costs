@@ -55,7 +55,7 @@ function App() {
     }
 
     if(category === "all" & chosenMonth !== 'all'){
-      filteredItems = costs.filter(cost => {
+      filteredItems = costs.filter( (cost) => {
         const date = new Date (cost.date)
         const month = date.getMonth()
 
@@ -122,8 +122,8 @@ function App() {
     filteredItems.map(f => {
       const secondSum = Number(f.sum)
       sum = sum + secondSum
+      return sum
     })
-    return sum
   }  
   
   function createArrGroupsCosts(){
@@ -224,7 +224,7 @@ function App() {
             {filteredCosts.length === 0 && (
               <div className='text-white font-semibold text-lg mb-6'> Нет трат в этой категории </div>
             )}        
-            {filteredCosts.length > 0 && filteredCosts.map(f => {
+          {filteredCosts.length > 0 && filteredCosts.map( (f) => {
               return(
                 <Cost sign={'-'} sum={f.sum} date={f.date} category={f.category}/>
               )
