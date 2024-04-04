@@ -1,7 +1,7 @@
 import './App.css';
 import Header from 'components/Header';
 import Form from 'components/Form';
-import Cost from 'components/Cost';
+import Item from 'components/Item';
 import categories from 'categories';
 import { useEffect, useState } from 'react';
 import CategoriesContainer from 'components/CategoriesContainer'; 
@@ -121,9 +121,9 @@ function App() {
     
     filteredItems.map(f => {
       const secondSum = Number(f.sum)
-      sum = sum + secondSum
-      return sum
+      sum = sum + secondSum      
     })
+    return sum
   }  
   
   function createArrGroupsCosts(){
@@ -204,6 +204,28 @@ function App() {
     }
   })
 
+  function deleteCost(id){
+    const newArr = [...costs]
+    costs.map( c => {
+      if(c.id === id){
+        const indx = costs.indexOf(c)
+        newArr.splice(indx,1)
+      }
+    })
+    setCosts(newArr)
+  }
+
+  function deleteIncome(id){
+    const newArr = [...incomes]
+    incomes.map( i => {
+      if(i.id === id){
+        const indx = incomes.indexOf(i)
+        newArr.splice(indx,1)
+      }
+    })
+    setIncomes(newArr)
+  }
+
   return (
     <div className='background min-h-screen'>
       <div className="App">
@@ -219,14 +241,14 @@ function App() {
           categories={categories}
           all={'allCosts'}
         />      
-        <Form addItem={addCost} categories={categories}/>
+        <Form addItem={addCost} categories={categories} arr={costs}/>
         <div>
             {filteredCosts.length === 0 && (
               <div className='text-white font-semibold text-lg mb-6'> Нет трат в этой категории </div>
             )}        
           {filteredCosts.length > 0 && filteredCosts.map( (f) => {
               return(
-                <Cost sign={'-'} sum={f.sum} date={f.date} category={f.category}/>
+                <Item sign={'-'} sum={f.sum} date={f.date} category={f.category} id={f.id} deleteItem={deleteCost}/>
               )
             })}
         </div>
@@ -243,14 +265,14 @@ function App() {
           categories={categoriesIncomes}
           all={'allIncomes'}
         />      
-        <Form addItem={addIncome} categories={categoriesIncomes}/>
+        <Form addItem={addIncome} categories={categoriesIncomes} arr={incomes}/>
         <div>
             {filteredIncomes.length === 0 && (
               <div className='text-white font-semibold text-lg mb-6'> Нет доходов в этой категории </div>
             )}        
             {filteredIncomes.length > 0 && filteredIncomes.map(f => {
               return(                
-                <Cost sign={'+'} sum={f.sum} date={f.date} category={f.category}/>
+                <Item sign={'+'} sum={f.sum} date={f.date} category={f.category} id={f.id} deleteItem={deleteIncome}/>
               )
             })}
         </div>

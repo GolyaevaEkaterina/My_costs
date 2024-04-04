@@ -3,15 +3,27 @@ import { useState } from "react"
 import './Form.css';
 import { format} from "date-fns";
 
-function Form({addItem, categories}){
+function Form({addItem, categories, arr}){
     
     const [sum, setSum] = useState("")
     const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"))
     const [category, setCategory] = useState(categories[1])
     
-    function getItem(event){
+    function getItem(event, arr){
+        let id = 0
+        const length = arr.length   
+              
+        if(length === 0){
+            id = length + 1
+        }            
+        if(length > 0){
+            const idLast = arr[0].id
+            id = idLast + 1
+        }   
+
         event.preventDefault()
         const item={
+            id,
             sum,
             date,
             category
@@ -70,7 +82,7 @@ function Form({addItem, categories}){
                         ))}
                     </select>
             </div>
-            <Button handleClick={getItem} title={"Добавить"} type="submit"/>
+            <Button handleClick={getItem} title={"Добавить"} type="submit" arr={arr}/>
             </form>
         </div>  
     )
