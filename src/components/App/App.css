@@ -9,14 +9,6 @@
   background-color: #180537;
 }
 
-.container-costs{
-  background: linear-gradient(#F368FC, #9446ED);
-}
-
-.container-incomes{
-  background: linear-gradient(#62F4EB, #3A66DB);
-}
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;

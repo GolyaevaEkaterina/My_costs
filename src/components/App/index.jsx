@@ -1,15 +1,11 @@
 import './App.css';
 import Header from 'components/Header';
-import Form from 'components/Form';
-import Item from 'components/Item';
-import categories from 'categories';
-import { useEffect, useState } from 'react';
-import CategoriesContainer from 'components/CategoriesContainer'; 
-import classNames from 'classnames';
-import Months from 'components/Months';
-import categoriesIncomes from 'categoriesIncomes';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import BodyMain from 'components/BodyMain';
+import categories from 'categories';
+import categoriesIncomes from 'categoriesIncomes';
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 
 function App() {
   const arrCosts = JSON.parse(localStorage.getItem('costs'))
@@ -154,18 +150,6 @@ function App() {
     })
     setGroupsIncomes(newGroups)
   }
-  
-  const[isOpenIncomes, setIsOpenIncomes] = useState(false)
-  const[isOpenCosts, setIsOpenCosts] = useState(true)  
-
-  function openIncomes(){
-    setIsOpenIncomes(!isOpenIncomes)
-    setIsOpenCosts(!isOpenCosts)
-  }
-  function openCosts(){
-    setIsOpenCosts(!isOpenCosts)
-    setIsOpenIncomes(!isOpenIncomes)
-  }  
 
   const filteredCosts = costs.filter(cost => {
     const date = new Date (cost.date)
@@ -226,66 +210,43 @@ function App() {
   }
 
   return (
-    <BrowserRouter className='background min-h-screen'>
+    <BrowserRouter className='background min-h-screen w-screen'>
       <div className="App">
-      <Header handleClick={()=>openIncomes()} handleClickCosts={()=>openCosts()}/>
-      <Routes>
-        <Route path='/costs' element={<BodyMain />}/>
-        <Route path='/incomes' element={<BodyMain />}/>
+        <Header/>
+        <Routes>
+          <Route path='/costs' element = {
+            <BodyMain
+              handleClick={setChosenMonth}
+              setCategoryFilter={setCategoryFilter}
+              calculateCategory={calculateCosts}
+              arrForDiagram={groupsCosts}
+              categories={categories}
+              all={'allCosts'}
+              addItem={addCost}
+              arr={costs}
+              filteredItems={filteredCosts}
+              sign={'-'}
+              deleteItem={deleteCost}
+            />
+          }/>
 
-      </Routes>
+          <Route path='/incomes' element={
+            <BodyMain
+              handleClick={setChosenMonth}
+              setCategoryFilter={setCategoryFilter}
+              calculateCategory={calculateIncomes}
+              arrForDiagram={groupsIncomes}
+              categories={categoriesIncomes}
+              all={'allIncomes'}
+              addItem={addIncome}
+              arr={incomes}
+              filteredItems={filteredIncomes}
+              sign={'+'}
+              deleteItem={deleteIncome}
+            />
+          }/>
 
-
-
-      <div className={classNames('rounded-b-lg border-t-0 p-1 md:p-4 container-costs shadow-violet-500 shadow-lg',{
-        'hidden': !isOpenCosts
-        })}>
-        <Months handleClick={setChosenMonth}/>        
-        <CategoriesContainer 
-          setCategoryFilter={setCategoryFilter} 
-          calculateCategory={calculateCosts}
-          arr={groupsCosts}
-          categories={categories}
-          all={'allCosts'}
-        />      
-        <Form addItem={addCost} categories={categories} arr={costs}/>
-        <div>
-            {filteredCosts.length === 0 && (
-              <div className='text-white font-semibold text-lg mb-6'> Нет трат в этой категории </div>
-            )}        
-          {filteredCosts.length > 0 && filteredCosts.map( (f) => {
-              return(
-                <Item sign={'-'} sum={f.sum} date={f.date} category={f.category} id={f.id} deleteItem={deleteCost}/>
-              )
-            })}
-        </div>
-      </div>
-      
-      <div className={classNames('rounded-b-lg border-t-0 p-1 md:p-4 container-incomes shadow-blue-500 shadow-lg',{
-        'hidden': !isOpenIncomes
-        })}>
-        <Months handleClick={setChosenMonth}/>        
-        <CategoriesContainer 
-          setCategoryFilter={setCategoryFilter} 
-          calculateCategory={calculateIncomes}
-          arr={groupsIncomes}
-          categories={categoriesIncomes}
-          all={'allIncomes'}
-        />      
-        <Form addItem={addIncome} categories={categoriesIncomes} arr={incomes}/>
-        <div>
-            {filteredIncomes.length === 0 && (
-              <div className='text-white font-semibold text-lg mb-6'> Нет доходов в этой категории </div>
-            )}        
-            {filteredIncomes.length > 0 && filteredIncomes.map(f => {
-              return(                
-                <Item sign={'+'} sum={f.sum} date={f.date} category={f.category} id={f.id} deleteItem={deleteIncome}/>
-              )
-            })}
-        </div>
-      
-
-      </div>
+        </Routes>
       </div>
     </BrowserRouter>
   );
