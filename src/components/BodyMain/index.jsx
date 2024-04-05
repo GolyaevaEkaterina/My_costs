@@ -1,18 +1,8 @@
-import './App.css';
-import Header from 'components/Header';
-import Form from 'components/Form';
-import Item from 'components/Item';
-import categories from 'categories';
-import { useEffect, useState } from 'react';
-import CategoriesContainer from 'components/CategoriesContainer'; 
-import classNames from 'classnames';
-import Months from 'components/Months';
-import categoriesIncomes from 'categoriesIncomes';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import BodyMain from 'components/BodyMain';
+import './BodyMain.css';
 
-function App() {
-  const arrCosts = JSON.parse(localStorage.getItem('costs'))
+const BodyMain = () => {
+
+    const arrCosts = JSON.parse(localStorage.getItem('costs'))
   const arrIncomes = JSON.parse(localStorage.getItem('incomes'))
 
   const [costs, setCosts] = useState(arrCosts === null ? [] : arrCosts)
@@ -46,6 +36,7 @@ function App() {
     localStorage.setItem('costs', JSON.stringify(costs))
     console.log('apdate costs')
   }, [costs])
+
 
   function calculateCosts(category){
     let filteredItems
@@ -156,7 +147,8 @@ function App() {
   }
   
   const[isOpenIncomes, setIsOpenIncomes] = useState(false)
-  const[isOpenCosts, setIsOpenCosts] = useState(true)  
+  const[isOpenCosts, setIsOpenCosts] = useState(true)
+  
 
   function openIncomes(){
     setIsOpenIncomes(!isOpenIncomes)
@@ -165,7 +157,8 @@ function App() {
   function openCosts(){
     setIsOpenCosts(!isOpenCosts)
     setIsOpenIncomes(!isOpenIncomes)
-  }  
+  }
+  
 
   const filteredCosts = costs.filter(cost => {
     const date = new Date (cost.date)
@@ -224,71 +217,32 @@ function App() {
     })
     setIncomes(newArr)
   }
-
-  return (
-    <BrowserRouter className='background min-h-screen'>
-      <div className="App">
-      <Header handleClick={()=>openIncomes()} handleClickCosts={()=>openCosts()}/>
-      <Routes>
-        <Route path='/costs' element={<BodyMain />}/>
-        <Route path='/incomes' element={<BodyMain />}/>
-
-      </Routes>
-
-
-
-      <div className={classNames('rounded-b-lg border-t-0 p-1 md:p-4 container-costs shadow-violet-500 shadow-lg',{
-        'hidden': !isOpenCosts
-        })}>
-        <Months handleClick={setChosenMonth}/>        
-        <CategoriesContainer 
-          setCategoryFilter={setCategoryFilter} 
-          calculateCategory={calculateCosts}
-          arr={groupsCosts}
-          categories={categories}
-          all={'allCosts'}
-        />      
-        <Form addItem={addCost} categories={categories} arr={costs}/>
-        <div>
-            {filteredCosts.length === 0 && (
-              <div className='text-white font-semibold text-lg mb-6'> Нет трат в этой категории </div>
-            )}        
-          {filteredCosts.length > 0 && filteredCosts.map( (f) => {
-              return(
-                <Item sign={'-'} sum={f.sum} date={f.date} category={f.category} id={f.id} deleteItem={deleteCost}/>
-              )
-            })}
-        </div>
-      </div>
-      
-      <div className={classNames('rounded-b-lg border-t-0 p-1 md:p-4 container-incomes shadow-blue-500 shadow-lg',{
-        'hidden': !isOpenIncomes
-        })}>
-        <Months handleClick={setChosenMonth}/>        
-        <CategoriesContainer 
-          setCategoryFilter={setCategoryFilter} 
-          calculateCategory={calculateIncomes}
-          arr={groupsIncomes}
-          categories={categoriesIncomes}
-          all={'allIncomes'}
-        />      
-        <Form addItem={addIncome} categories={categoriesIncomes} arr={incomes}/>
-        <div>
-            {filteredIncomes.length === 0 && (
-              <div className='text-white font-semibold text-lg mb-6'> Нет доходов в этой категории </div>
-            )}        
-            {filteredIncomes.length > 0 && filteredIncomes.map(f => {
-              return(                
-                <Item sign={'+'} sum={f.sum} date={f.date} category={f.category} id={f.id} deleteItem={deleteIncome}/>
-              )
-            })}
-        </div>
-      
-
-      </div>
-      </div>
-    </BrowserRouter>
-  );
+  
+    return(
+        <div className={classNames('rounded-b-lg border-t-0 p-1 md:p-4 container-costs shadow-violet-500 shadow-lg',{
+            'hidden': !isOpenCosts
+            })}>
+            <Months handleClick={setChosenMonth}/>        
+            <CategoriesContainer 
+              setCategoryFilter={setCategoryFilter} 
+              calculateCategory={calculateCosts}
+              arr={groupsCosts}
+              categories={categories}
+              all={'allCosts'}
+            />      
+            <Form addItem={addCost} categories={categories} arr={costs}/>
+            <div>
+                {filteredCosts.length === 0 && (
+                  <div className='text-white font-semibold text-lg mb-6'> Нет трат в этой категории </div>
+                )}        
+              {filteredCosts.length > 0 && filteredCosts.map( (f) => {
+                  return(
+                    <Item sign={'-'} sum={f.sum} date={f.date} category={f.category} id={f.id} deleteItem={deleteCost}/>
+                  )
+                })}
+            </div>
+          </div>
+    )
 }
 
-export default App;
+export default BodyMain
