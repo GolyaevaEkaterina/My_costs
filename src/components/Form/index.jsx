@@ -7,7 +7,7 @@ function Form({addItem, categories, arr}){
     
     const [sum, setSum] = useState("")
     const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"))
-    const [category, setCategory] = useState(categories[1])
+    const [category, setCategory] = useState(categories[1].name)
     
     function getItem(event, arr){
         let id = 0
@@ -31,7 +31,7 @@ function Form({addItem, categories, arr}){
         addItem(item)
         setSum('')
         setDate(date)
-        setCategory(categories[1])
+        setCategory(categories[1].name)
     }
 
     function inputSum(event, sum){
@@ -78,7 +78,7 @@ function Form({addItem, categories, arr}){
                     type="text" 
                     className="input">
                         {categories.map(category => (
-                            <option key={category}>{category}</option>
+                            <option key={category.name}>{category.name}</option>
                         ))}
                     </select>
             </div>
