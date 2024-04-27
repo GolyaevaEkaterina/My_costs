@@ -2,7 +2,7 @@ import './App.css';
 import BodyCosts from 'components/BodyCosts';
 import BodyIncomes from 'components/BodyIncomes';
 import Header from 'components/Header';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function App() {
   const[isOpenIncomes, setIsOpenIncomes] = useState(false)
